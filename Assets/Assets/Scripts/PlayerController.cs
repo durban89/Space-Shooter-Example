@@ -15,7 +15,9 @@ public class PlayerController : MonoBehaviour {
 
 	public GameObject shot;
 	public Transform shotSpawn;
+	public SimpleTouchPad touchPad;
 	public float fireRate;
+	public SimpleTouchAreaButton areaButton;
 
 	private Rigidbody rb;
 	private AudioSource audio;
@@ -28,7 +30,13 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update(){
-		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+//		if (Input.GetButton ("Fire1") && Time.time > nextFire) {
+//			nextFire = Time.time + fireRate;
+//			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+//			audio.Play ();
+//		}
+
+		if (areaButton.CanFire() && Time.time > nextFire) {
 			nextFire = Time.time + fireRate;
 			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
 			audio.Play ();
@@ -52,11 +60,13 @@ public class PlayerController : MonoBehaviour {
 //
 //		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
 
-		Vector3 accelerationRaw = Input.acceleration;
-		Vector3 acceleration = FixAcceleration (accelerationRaw);
+		// acceleration
+//		Vector3 accelerationRaw = Input.acceleration;
+//		Vector3 acceleration = FixAcceleration (accelerationRaw);
+//		Vector3 movement = new Vector3 (acceleration.x, 0.0f, acceleration.y);
 
-		Vector3 movement = new Vector3 (acceleration.x, 0.0f, acceleration.y);
-
+		Vector2 direction = touchPad.GetDirection ();
+		Vector3 movement = new Vector3 (direction.x, 0.0f, direction.y);
 		rb.velocity = movement * speed;
 
 		rb.position = new Vector3 
